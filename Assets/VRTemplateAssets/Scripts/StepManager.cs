@@ -16,6 +16,12 @@ namespace Unity.VRTemplate
         public GameObject RightButton;
         public GameObject RightButtonText;
 
+        public GameObject StandingFullResetGood;
+        public GameObject StandingFullResetBadTouching;
+        public GameObject StandingFullResetBadSpreading;
+
+        private Step m_currentStep;
+
         public void Start()
         {
             SetStep(new IntroductionStep(this));
@@ -23,15 +29,25 @@ namespace Unity.VRTemplate
 
         private void SetStep(Step nextStep)
         {
+            if (m_currentStep != null)
+            {
+                m_currentStep.OnExit();
+            }
+
+            nextStep.OnEnter();
+
             nextStep.UpdateTitle(Title.GetComponent<TextMeshProUGUI>());
             nextStep.UpdateContent(Content.GetComponent<TextMeshProUGUI>());
             nextStep.UpdateLeftButton(LeftButton.GetComponent<Button>(), LeftButtonText.GetComponent<TextMeshProUGUI>());
             nextStep.UpdateRightButton(RightButton.GetComponent<Button>(), RightButtonText.GetComponent<TextMeshProUGUI>());
+
+            m_currentStep = nextStep;
         }
-        
+
         private enum Group : int
         {
             Introduction,
+            AutomaticMounting,
             Done,
         }
 
@@ -61,6 +77,14 @@ namespace Unity.VRTemplate
             {
                 button.gameObject.SetActive(false);
             }
+
+            public virtual void OnEnter()
+            {
+            }
+
+            public virtual void OnExit()
+            {
+            }
         }
 
         private class IntroductionStep : Step
@@ -85,6 +109,217 @@ namespace Unity.VRTemplate
             public override void UpdateContent(TextMeshProUGUI content)
             {
                 content.text = "We will teach you how to use your trackers in VR";
+            }
+
+            public override void UpdateRightButton(Button button, TextMeshProUGUI content)
+            {
+                content.text = "Next";
+
+                button.onClick.RemoveAllListeners();
+                button.onClick.AddListener(() =>
+                {
+                    m_stepManager.SetStep(new AutomaticMountingIntroStep(m_stepManager));
+                });
+
+                button.gameObject.SetActive(true);
+            }
+        }
+
+        private abstract class AutomaticMountingStep : Step
+        {
+            public override Group GetGroup()
+            {
+                return Group.AutomaticMounting;
+            }
+
+            public override void UpdateTitle(TextMeshProUGUI title)
+            {
+                title.text = "Automatic Mounting";
+            }
+        }
+
+        private class AutomaticMountingIntroStep : AutomaticMountingStep
+        {
+            private readonly StepManager m_stepManager;
+
+            public AutomaticMountingIntroStep(StepManager stepManager)
+            {
+                m_stepManager = stepManager;
+            }
+
+            public override void UpdateContent(TextMeshProUGUI content)
+            {
+                content.text =
+                    "Whenever you put on your trackers, you must go through Automatic Mounting\n\n" +
+                    "<color=grey>Mounting tells SlimeVR where you've placed the trackers on your body";
+            }
+
+            public override void UpdateLeftButton(Button button, TextMeshProUGUI content)
+            {
+                content.text = "Back";
+
+                button.onClick.RemoveAllListeners();
+                button.onClick.AddListener(() =>
+                {
+                    m_stepManager.SetStep(new IntroductionStep(m_stepManager));
+                });
+
+                button.gameObject.SetActive(true);
+            }
+
+            public override void UpdateRightButton(Button button, TextMeshProUGUI content)
+            {
+                content.text = "Next";
+
+                button.onClick.RemoveAllListeners();
+                button.onClick.AddListener(() =>
+                {
+                    m_stepManager.SetStep(new AutomaticMountingStandingFullResetStep1(m_stepManager));
+                });
+
+                button.gameObject.SetActive(true);
+            }
+        }
+
+        private class AutomaticMountingStandingFullResetStep1 : AutomaticMountingStep
+        {
+            private readonly StepManager m_stepManager;
+
+            public AutomaticMountingStandingFullResetStep1(StepManager stepManager)
+            {
+                m_stepManager = stepManager;
+            }
+
+            public override void UpdateContent(TextMeshProUGUI content)
+            {
+                content.text =
+                    "Standing Full Reset\n\n" +
+                    "Stand up straight\n\n" +
+                    "Keep the distance between your feet the same as your hip";
+            }
+
+            public override void UpdateLeftButton(Button button, TextMeshProUGUI content)
+            {
+                content.text = "Back";
+
+                button.onClick.RemoveAllListeners();
+                button.onClick.AddListener(() =>
+                {
+                    m_stepManager.SetStep(new AutomaticMountingIntroStep(m_stepManager));
+                });
+
+                button.gameObject.SetActive(true);
+            }
+
+            public override void UpdateRightButton(Button button, TextMeshProUGUI content)
+            {
+                content.text = "Next";
+
+                button.onClick.RemoveAllListeners();
+                button.onClick.AddListener(() =>
+                {
+                    m_stepManager.SetStep(new AutomaticMountingStandingFullResetStep2(m_stepManager));
+                });
+
+                button.gameObject.SetActive(true);
+            }
+
+            public override void OnEnter()
+            {
+                m_stepManager.StandingFullResetGood.SetActive(true);
+                m_stepManager.StandingFullResetBadTouching.SetActive(true);
+                m_stepManager.StandingFullResetBadSpreading.SetActive(true);
+            }
+
+            public override void OnExit()
+            {
+                m_stepManager.StandingFullResetGood.SetActive(false);
+                m_stepManager.StandingFullResetBadTouching.SetActive(false);
+                m_stepManager.StandingFullResetBadSpreading.SetActive(false);
+            }
+        }
+
+        private class AutomaticMountingStandingFullResetStep2 : AutomaticMountingStep
+        {
+            private readonly StepManager m_stepManager;
+
+            public AutomaticMountingStandingFullResetStep2(StepManager stepManager)
+            {
+                m_stepManager = stepManager;
+            }
+
+            public override void UpdateContent(TextMeshProUGUI content)
+            {
+                content.text =
+                    "Standing Full Reset\n\n" +
+                    "Make sure your legs are as vertical as possible";
+            }
+
+            public override void UpdateLeftButton(Button button, TextMeshProUGUI content)
+            {
+                content.text = "Back";
+
+                button.onClick.RemoveAllListeners();
+                button.onClick.AddListener(() =>
+                {
+                    m_stepManager.SetStep(new AutomaticMountingStandingFullResetStep1(m_stepManager));
+                });
+
+                button.gameObject.SetActive(true);
+            }
+
+            public override void UpdateRightButton(Button button, TextMeshProUGUI content)
+            {
+                content.text = "Next";
+
+                button.onClick.RemoveAllListeners();
+                button.onClick.AddListener(() =>
+                {
+                    m_stepManager.SetStep(new AutomaticMountingStandingFullResetStep3(m_stepManager));
+                });
+
+                button.gameObject.SetActive(true);
+            }
+        }
+
+        private class AutomaticMountingStandingFullResetStep3 : Step
+        {
+            private readonly StepManager m_stepManager;
+
+            public AutomaticMountingStandingFullResetStep3(StepManager stepManager)
+            {
+                m_stepManager = stepManager;
+            }
+
+            public override Group GetGroup()
+            {
+                return Group.AutomaticMounting;
+            }
+
+            public override void UpdateTitle(TextMeshProUGUI title)
+            {
+                title.text = "Automatic Mounting";
+            }
+
+            public override void UpdateContent(TextMeshProUGUI content)
+            {
+                content.text =
+                    "Standing Full Reset\n\n" +
+                    "Rotate your feet so that your knees are pointing forward\n\n" +
+                    "<color=grey>It is fine for your feet to point slightly inwards or outwards. Your knees must point forward!";
+            }
+
+            public override void UpdateLeftButton(Button button, TextMeshProUGUI content)
+            {
+                content.text = "Back";
+
+                button.onClick.RemoveAllListeners();
+                button.onClick.AddListener(() =>
+                {
+                    m_stepManager.SetStep(new AutomaticMountingStandingFullResetStep2(m_stepManager));
+                });
+
+                button.gameObject.SetActive(true);
             }
 
             public override void UpdateRightButton(Button button, TextMeshProUGUI content)
@@ -132,7 +367,7 @@ namespace Unity.VRTemplate
                 button.onClick.RemoveAllListeners();
                 button.onClick.AddListener(() =>
                 {
-                    m_stepManager.SetStep(new IntroductionStep(m_stepManager));
+                    m_stepManager.SetStep(new AutomaticMountingStandingFullResetStep3(m_stepManager));
                 });
 
                 button.gameObject.SetActive(true);
