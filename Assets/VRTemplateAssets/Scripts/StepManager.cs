@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -70,11 +71,13 @@ namespace Unity.VRTemplate
 
             public virtual void UpdateLeftButton(Button button, TextMeshProUGUI content)
             {
+                button.interactable = true;
                 button.gameObject.SetActive(false);
             }
 
             public virtual void UpdateRightButton(Button button, TextMeshProUGUI content)
             {
+                button.interactable = true;
                 button.gameObject.SetActive(false);
             }
 
@@ -280,6 +283,20 @@ namespace Unity.VRTemplate
 
                 button.gameObject.SetActive(true);
             }
+
+            public override void OnEnter()
+            {
+                m_stepManager.StandingFullResetGood.SetActive(true);
+                m_stepManager.StandingFullResetBadTouching.SetActive(true);
+                m_stepManager.StandingFullResetBadSpreading.SetActive(true);
+            }
+
+            public override void OnExit()
+            {
+                m_stepManager.StandingFullResetGood.SetActive(false);
+                m_stepManager.StandingFullResetBadTouching.SetActive(false);
+                m_stepManager.StandingFullResetBadSpreading.SetActive(false);
+            }
         }
 
         private class AutomaticMountingStandingFullResetStep3 : Step
@@ -305,8 +322,8 @@ namespace Unity.VRTemplate
             {
                 content.text =
                     "Standing Full Reset\n\n" +
-                    "Rotate your feet so that your knees are pointing forward\n\n" +
-                    "<color=grey>It is fine for your feet to point slightly inwards or outwards. Your knees must point forward!";
+                    "If possible, keep both your knees and feet pointing forward\n\n" +
+                    "<color=grey>If you can't, prioritize your knees pointing forward! Your feet can point slightly inwards or outwards";
             }
 
             public override void UpdateLeftButton(Button button, TextMeshProUGUI content)
@@ -329,10 +346,96 @@ namespace Unity.VRTemplate
                 button.onClick.RemoveAllListeners();
                 button.onClick.AddListener(() =>
                 {
+                    m_stepManager.SetStep(new AutomaticMountingStandingFullResetStep4(m_stepManager));
+                });
+
+                button.gameObject.SetActive(true);
+            }
+
+            public override void OnEnter()
+            {
+                m_stepManager.StandingFullResetGood.SetActive(true);
+                m_stepManager.StandingFullResetBadTouching.SetActive(true);
+                m_stepManager.StandingFullResetBadSpreading.SetActive(true);
+            }
+
+            public override void OnExit()
+            {
+                m_stepManager.StandingFullResetGood.SetActive(false);
+                m_stepManager.StandingFullResetBadTouching.SetActive(false);
+                m_stepManager.StandingFullResetBadSpreading.SetActive(false);
+            }
+        }
+
+        private class AutomaticMountingStandingFullResetStep4 : Step
+        {
+            private readonly StepManager m_stepManager;
+
+            public AutomaticMountingStandingFullResetStep4(StepManager stepManager)
+            {
+                m_stepManager = stepManager;
+            }
+
+            public override Group GetGroup()
+            {
+                return Group.AutomaticMounting;
+            }
+
+            public override void UpdateTitle(TextMeshProUGUI title)
+            {
+                title.text = "Automatic Mounting";
+            }
+
+            public override void UpdateContent(TextMeshProUGUI content)
+            {
+                content.text =
+                    "Standing Full Reset\n\n" +
+                    "Now we're ready to do a full reset\n\n" +
+                    "Press \"Reset\", look forward, and wait for 3 seconds";
+            }
+
+            public override void UpdateLeftButton(Button button, TextMeshProUGUI content)
+            {
+                content.text = "Back";
+
+                button.onClick.RemoveAllListeners();
+                button.onClick.AddListener(() =>
+                {
+                    m_stepManager.SetStep(new AutomaticMountingStandingFullResetStep3(m_stepManager));
+                });
+
+                button.gameObject.SetActive(true);
+            }
+
+            public override void UpdateRightButton(Button button, TextMeshProUGUI content)
+            {
+                content.text = "Reset";
+
+                button.onClick.RemoveAllListeners();
+                button.onClick.AddListener(async () =>
+                {
+                    button.interactable = false;
+
+                    await Task.Delay(3000);
+
                     m_stepManager.SetStep(new DoneStep(m_stepManager));
                 });
 
                 button.gameObject.SetActive(true);
+            }
+
+            public override void OnEnter()
+            {
+                m_stepManager.StandingFullResetGood.SetActive(true);
+                m_stepManager.StandingFullResetBadTouching.SetActive(true);
+                m_stepManager.StandingFullResetBadSpreading.SetActive(true);
+            }
+
+            public override void OnExit()
+            {
+                m_stepManager.StandingFullResetGood.SetActive(false);
+                m_stepManager.StandingFullResetBadTouching.SetActive(false);
+                m_stepManager.StandingFullResetBadSpreading.SetActive(false);
             }
         }
 
