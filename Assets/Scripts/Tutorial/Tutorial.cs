@@ -6,6 +6,7 @@ public partial class Tutorial : MonoBehaviour
     public GameObject Camera;
     public GameObject Dialog;
 
+    public GameObject TrackerPositions;
     public GameObject StandingFullReset;
     public GameObject KneelingFullReset;
 
@@ -14,6 +15,8 @@ public partial class Tutorial : MonoBehaviour
         Intro,
         Height_Intro,
         Height_SetHeight,
+        Trackers_TurnOnAndCalibrate,
+        Trackers_PutOnBody,
         Mounting_Initial_MoveAround,
         Mounting_Intro,
         Mounting_Quick_StandingFullReset,
@@ -51,6 +54,8 @@ public partial class Tutorial : MonoBehaviour
         { Step.Intro,                                           new Step_Intro() },
         { Step.Height_Intro,                                    new Step_Height_Intro() },
         { Step.Height_SetHeight,                                new Step_Height_SetHeight() },
+        { Step.Trackers_TurnOnAndCalibrate,                     new Step_Trackers_TurnOnAndCalibrate() },
+        { Step.Trackers_PutOnBody,                              new Step_Trackers_PutOnBody() },
         { Step.Mounting_Initial_MoveAround,                     new Step_Mounting_Initial_MoveAround() },
         { Step.Mounting_Intro,                                  new Step_Mounting_Intro() },
         { Step.Mounting_Quick_StandingFullReset,                new Step_Mounting_Quick_StandingFullReset() },
