@@ -47,6 +47,7 @@ partial class Tutorial
             {
                 dialog.RightButton.GetComponent<Button>().interactable = false;
                 await Task.Delay(3000);
+                await tutorial.SlimeVRClient.GetComponent<SlimeVRClient>().SendReset(solarxr_protocol.rpc.ResetType.Full);
                 tutorial.NextStep();
             });
 
@@ -74,6 +75,7 @@ partial class Tutorial
             {
                 dialog.RightButton.GetComponent<Button>().interactable = false;
                 await Task.Delay(3000);
+                await tutorial.SlimeVRClient.GetComponent<SlimeVRClient>().SendReset(solarxr_protocol.rpc.ResetType.Mounting);
                 tutorial.NextStep();
             });
 
@@ -170,6 +172,7 @@ partial class Tutorial
             {
                 dialog.RightButton.GetComponent<Button>().interactable = false;
                 await Task.Delay(3000);
+                await tutorial.SlimeVRClient.GetComponent<SlimeVRClient>().SendReset(solarxr_protocol.rpc.ResetType.Full);
                 tutorial.NextStep();
             });
 
@@ -257,6 +260,7 @@ partial class Tutorial
             {
                 dialog.RightButton.GetComponent<Button>().interactable = false;
                 await Task.Delay(3000);
+                await tutorial.SlimeVRClient.GetComponent<SlimeVRClient>().SendReset(solarxr_protocol.rpc.ResetType.Mounting);
                 tutorial.NextStep();
             });
 
@@ -277,7 +281,7 @@ partial class Tutorial
             dialog.SetContent(
                 "Stand up and move around a bit\n\n" +
                 "Your in-game avatar should match your movements\n\n" +
-                "<color=gray>Automatic Mounting takes some practice, but is critical for accurate tracking");
+                "<color=grey>Automatic Mounting takes some practice, but is critical for accurate tracking");
             dialog.SetLeftButton("Retry", () => tutorial.SetStep(Step.Mounting_StandingFullReset_Intro));
             dialog.SetRightButton("Next", tutorial.NextStep);
         }

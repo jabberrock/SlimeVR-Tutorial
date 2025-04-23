@@ -3,6 +3,8 @@ using UnityEngine;
 
 public partial class Tutorial : MonoBehaviour
 {
+    public GameObject SlimeVRClient;
+
     public GameObject Camera;
     public GameObject Dialog;
 

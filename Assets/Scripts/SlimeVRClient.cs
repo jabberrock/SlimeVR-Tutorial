@@ -8,6 +8,7 @@ using solarxr_protocol.datatypes.math;
 using solarxr_protocol.pub_sub;
 using solarxr_protocol.rpc;
 using System;
+using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -32,6 +33,7 @@ public class SlimeVRClient : MonoBehaviour
     private const int DataFeedUpdateDelayInMs = 1000 / FPS;
 
     private readonly CancellationTokenSource cancellationTokenSource = new();
+    private ClientWebSocket client;
 
     private DateTime lastCameraCheck;
     private Transform lastCameraTransform;
@@ -115,7 +117,7 @@ public class SlimeVRClient : MonoBehaviour
 
     private async Task NetworkLoop(CancellationToken cancellationToken)
     {
-        using var client = new ClientWebSocket();
+        this.client = new ClientWebSocket();
 
         while (true)
         {
@@ -276,6 +278,41 @@ public class SlimeVRClient : MonoBehaviour
                 Skeleton = dataFeedMsg.Value.MessageAsDataFeedUpdate();
             }
         }
+    }
+
+    public async Task SendReset(ResetType resetType)
+    {
+        var buffer = new byte[1024 * 1024];
+
+        var builder = new FlatBufferBuilder(new ByteBuffer(buffer));
+
+        ResetRequest.StartResetRequest(builder);
+        ResetRequest.AddResetType(builder, resetType);
+        var resetRequestOffset = ResetRequest.EndResetRequest(builder);
+
+        RpcMessageHeader.StartRpcMessageHeader(builder);
+        RpcMessageHeader.AddMessageType(builder, RpcMessage.ResetRequest);
+        RpcMessageHeader.AddMessage(builder, resetRequestOffset.Value);
+        var rpcMessageHeaderOffset = RpcMessageHeader.EndRpcMessageHeader(builder);
+
+        var rpcMessagesOffset = MessageBundle.CreateRpcMsgsVector(builder, new[] { rpcMessageHeaderOffset });
+
+        MessageBundle.StartMessageBundle(builder);
+        MessageBundle.AddRpcMsgs(builder, rpcMessagesOffset);
+        var messageBundleOffset = MessageBundle.EndMessageBundle(builder);
+
+        builder.Finish(messageBundleOffset.Value);
+
+        Debug.Log("Sending full reset request...");
+
+        await client.SendAsync(
+            new ReadOnlyMemory<byte>(
+                buffer,
+                builder.DataBuffer.Position,
+                builder.DataBuffer.Length - builder.DataBuffer.Position),
+            WebSocketMessageType.Binary,
+            true,
+            cancellationTokenSource.Token);
     }
 
     private static Vector3 RHSToLHSVector3(Vec3f v)
