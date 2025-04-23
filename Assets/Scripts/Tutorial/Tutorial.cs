@@ -16,6 +16,9 @@ public partial class Tutorial : MonoBehaviour
         Mounting_StandingFullReset_Intro,
         Mounting_StandingFullReset_StandUpStraight,
         Mounting_StandingFullReset_Reset,
+        Mounting_KneelingMountingReset_Intro,
+        Mounting_KneelingMountingReset_KneelOnGround,
+        Mounting_KneelingMountingReset_Reset,
         Done,
     }
 
@@ -41,6 +44,9 @@ public partial class Tutorial : MonoBehaviour
         { Step.Mounting_StandingFullReset_Intro,                new Step_Mounting_StandingFullReset_Intro() },
         { Step.Mounting_StandingFullReset_StandUpStraight,      new Step_Mounting_StandingFullReset_StandUpStraight() },
         { Step.Mounting_StandingFullReset_Reset,                new Step_Mounting_StandingFullReset_Reset() },
+        { Step.Mounting_KneelingMountingReset_Intro,            new Step_Mounting_KneelingMountingReset_Intro() },
+        { Step.Mounting_KneelingMountingReset_KneelOnGround,    new Step_Mounting_KneelingMountingReset_KneelOnGround() },
+        { Step.Mounting_KneelingMountingReset_Reset,            new Step_Mounting_KneelingMountingReset_Reset() },
         { Step.Done,                                            new Step_Done() },
     };
 
