@@ -148,6 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fc0d34940dd44129c17bc6d4396b866, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Camera: {fileID: 1176630116}
   Dialog: {fileID: 167457177}
   StandingFullResetGood: {fileID: 1351109255}
   StandingFullResetBadTouching: {fileID: 1389042760}

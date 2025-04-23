@@ -3,6 +3,7 @@ using UnityEngine;
 
 public partial class Tutorial : MonoBehaviour
 {
+    public GameObject Camera;
     public GameObject Dialog;
 
     public GameObject StandingFullResetGood;
@@ -12,6 +13,8 @@ public partial class Tutorial : MonoBehaviour
     private enum Step : int
     {
         Intro,
+        Height_Intro,
+        Height_SetHeight,
         Mounting_Intro,
         Mounting_StandingFullReset_Intro,
         Mounting_StandingFullReset_StandUpStraight,
@@ -40,6 +43,8 @@ public partial class Tutorial : MonoBehaviour
     private static readonly Dictionary<Step, StepBehavior> StepBehaviors = new()
     {
         { Step.Intro,                                           new Step_Intro() },
+        { Step.Height_Intro,                                    new Step_Height_Intro() },
+        { Step.Height_SetHeight,                                new Step_Height_SetHeight() },
         { Step.Mounting_Intro,                                  new Step_Mounting_Intro() },
         { Step.Mounting_StandingFullReset_Intro,                new Step_Mounting_StandingFullReset_Intro() },
         { Step.Mounting_StandingFullReset_StandUpStraight,      new Step_Mounting_StandingFullReset_StandUpStraight() },
