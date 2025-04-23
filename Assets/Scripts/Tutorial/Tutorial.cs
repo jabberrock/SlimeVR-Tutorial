@@ -6,22 +6,28 @@ public partial class Tutorial : MonoBehaviour
     public GameObject Camera;
     public GameObject Dialog;
 
-    public GameObject StandingFullResetGood;
-    public GameObject StandingFullResetBadTouching;
-    public GameObject StandingFullResetBadSpreading;
+    public GameObject StandingFullReset;
+    public GameObject KneelingFullReset;
 
     private enum Step : int
     {
         Intro,
         Height_Intro,
         Height_SetHeight,
+        Mounting_Initial_MoveAround,
         Mounting_Intro,
+        Mounting_Quick_StandingFullReset,
+        Mounting_Quick_KneelingMountingReset,
+        Mounting_Quick_MoveAround,
+        Mounting_Quick_Bad,
         Mounting_StandingFullReset_Intro,
         Mounting_StandingFullReset_StandUpStraight,
         Mounting_StandingFullReset_Reset,
         Mounting_KneelingMountingReset_Intro,
         Mounting_KneelingMountingReset_KneelOnGround,
+        Mounting_KneelingMountingReset_LeanForward,
         Mounting_KneelingMountingReset_Reset,
+        Mounting_Conclusion,
         Done,
     }
 
@@ -45,13 +51,20 @@ public partial class Tutorial : MonoBehaviour
         { Step.Intro,                                           new Step_Intro() },
         { Step.Height_Intro,                                    new Step_Height_Intro() },
         { Step.Height_SetHeight,                                new Step_Height_SetHeight() },
+        { Step.Mounting_Initial_MoveAround,                     new Step_Mounting_Initial_MoveAround() },
         { Step.Mounting_Intro,                                  new Step_Mounting_Intro() },
+        { Step.Mounting_Quick_StandingFullReset,                new Step_Mounting_Quick_StandingFullReset() },
+        { Step.Mounting_Quick_KneelingMountingReset,            new Step_Mounting_Quick_KneelingMountingReset() },
+        { Step.Mounting_Quick_MoveAround,                       new Step_Mounting_Quick_MoveAround() },
+        { Step.Mounting_Quick_Bad,                              new Step_Mounting_Quick_Bad() },
         { Step.Mounting_StandingFullReset_Intro,                new Step_Mounting_StandingFullReset_Intro() },
         { Step.Mounting_StandingFullReset_StandUpStraight,      new Step_Mounting_StandingFullReset_StandUpStraight() },
         { Step.Mounting_StandingFullReset_Reset,                new Step_Mounting_StandingFullReset_Reset() },
         { Step.Mounting_KneelingMountingReset_Intro,            new Step_Mounting_KneelingMountingReset_Intro() },
         { Step.Mounting_KneelingMountingReset_KneelOnGround,    new Step_Mounting_KneelingMountingReset_KneelOnGround() },
+        { Step.Mounting_KneelingMountingReset_LeanForward,      new Step_Mounting_KneelingMountingReset_LeanForward() },
         { Step.Mounting_KneelingMountingReset_Reset,            new Step_Mounting_KneelingMountingReset_Reset() },
+        { Step.Mounting_Conclusion,                             new Step_Mounting_Conclusion() },
         { Step.Done,                                            new Step_Done() },
     };
 

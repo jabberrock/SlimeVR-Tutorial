@@ -8,7 +8,7 @@ partial class Tutorial
         {
             dialog.Reset();
             dialog.SetTitle("Height");
-            dialog.SetContent("Before we start, let's make sure your place space is set up correctly");
+            dialog.SetContent("Before we start, let's make sure your play space is set up correctly");
             dialog.SetLeftButton("Previous", tutorial.PreviousStep);
             dialog.SetRightButton("Next", tutorial.NextStep);
         }
@@ -37,13 +37,13 @@ partial class Tutorial
             var heightFt = heightInInches / 12;
             var heightIn = heightInInches % 12;
 
-            var heightStr = $"{heightFt}'{heightIn}\" ({heightCm}cm)";
+            var heightStr = $"{heightFt}'{heightIn}\" ({heightCm} cm)";
 
             dialog.SetContent(
                 "Check your height!\n\n" +
                 "According to your VR headset, your height is:\n\n" +
-                "<size=180%>" + heightStr + "\n\n" +
-                "<size=100%><color=red>If this is incorrect, please fix your play space and restart");
+                "<size=180%>" + heightStr + "<size=100%>\n\n" +
+                "<color=red>If this is incorrect, please fix your play space and restart");
         }
     }
 }
